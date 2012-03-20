@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 from signalParser import signalParser as sp
 import scipy.signal as ss
 from filtfilt import filtfilt
-filename = 'signals/ania1_p300.obci'
+filename = '../eeg-signals/p300-csp/ania1_p300.obci'
 channels = ['Fp1','Fp2','F7','F3','Fz','F4','F8','T3','C3','Cz','C4','T4','T5','P3','Pz','P4','T6','O1','O2','FCz']
 #channels = ['T3','C3','Cz','C4','T4','T5','P3','Pz','P4','T6', 'FCz','Fz']
 #channels = ['O1','Oz','O2','PO8','PO3','PO4','Pz','Cz']
@@ -46,7 +46,7 @@ analyze = p300.p300analysis2(cl, dat.P, 2, mean,mu, sigma, left, right)
 
 b,a = ss.butter(3, 2*1.0/fs, btype = 'high')
 b_l, a_l = ss.butter(3, 20.0*2/fs, btype = 'low')
-s = sp('signals/ania2_p300.obci')
+s = sp('../eeg-signals/p300-csp/ania2_p300.obci')
 sig = s.prep_signal(fs, channels)
 tags = []
 for i in xrange(8):

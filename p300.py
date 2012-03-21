@@ -39,7 +39,7 @@ class p300_train(object):
         self.t1, self.t2 = self.show_mean(csp_time, 'Cz', dont_plot=False)
         P, vals = self.train_csp(signal2, [self.t1, self.t2])
         self.P = P
-        self.signal = np.dot(P[:, 0], signal2)
+        self.signal = np.dot(P, signal2)
         
     def __c2n(self, channel):
         return self.channels.index(channel)
@@ -47,8 +47,6 @@ class p300_train(object):
     def show_mean(self, time, channel, dont_plot=True, plt_all=False, mean_only=True, suggest=True):
         pre = time[0]
         post = time[1]
-        #b,a = ss.butter(3, 2*1.0/self.fs, btype = 'high')
-        #b_l,a_l = ss.butter(3, 2*20.0/self.fs, btype = 'low')
         to_see = np.zeros((post + pre) * self.fs)
         other = np.zeros((post + pre) * self.fs)
         tags2 = self.data.get_p300_tags(idx=self.idx, rest=True, samples=False)
@@ -56,15 +54,11 @@ class p300_train(object):
         sigs = np.zeros([len(tags2), len(to_see)])
         for j, i in enumerate(self.tags):
             if (i + post) * self.fs < self.data.sample_count:
-                #sig = filtfilt(b,a, self.signal_original[self.__c2n(channel), (i - pre) * self.fs : (i - pre) * self.fs + len(to_see)])
-                #sig = filtfilt(b_l, a_l, sig)
                 sig =  self.signal_original[self.__c2n(channel), (i - pre) * self.fs : (i - pre) * self.fs + len(to_see)]
                 sigs_trg[j, :] = sig
                 to_see += sig - sig.mean()
         for j, i in enumerate(tags2):
             if (i + post) * self.fs < self.data.sample_count:
-                #sig = filtfilt(b,a, self.signal_original[self.__c2n(channel), (i - pre) * self.fs : (i - pre) * self.fs + len(other)])
-                #sig = filtfilt(b_l, a_l, sig)
                 sig = self.signal_original[self.__c2n(channel), (i - pre) * self.fs : (i - pre) * self.fs + len(other)]
                 sigs[j, :] = sig
                 other += sig - sig.mean()
@@ -92,7 +86,23 @@ class p300_train(object):
         else: 
             to_draw1 = sigs_trg.T
             to_draw2 = sigs.T
-        if dont_plot:
+	pe = np.zeros(np.shape(sigs_trg)[1])
+        for i in range(np.shape(sigs_trg)[1]):
+		from scipy.stats import mannwhitneyu
+                U, pe[i] = mannwhitneyu(sigs[:,i], sigs_trg[:,i])	
+	
+
+
+##TUTAJ
+	pe0 = np.zeros(np.shape(pe))
+	pe0[np.where(pe*100<1)] = 1
+	p_chwilowa, = np.where(pe0 == 1)	
+	sug1 = t_vec[p_chwilowa[0]]
+	sug2 = t_vec[p_chwilowa[-1]]        
+	self.sug1 = sug1
+	self.sug2 = sug2	
+
+	if dont_plot:
             if suggest:
                 return sug1, sug2
         else:
@@ -105,7 +115,8 @@ class p300_train(object):
             if suggest:
                 plt.plot([sug1, sug1], [max(to_draw1), min(to_draw1)], 'r-', [sug2, sug2], [max(to_draw1), min(to_draw1)], 'r-',\
                     [t_vec[mx_idx], t_vec[mx_idx]],[min(to_draw1), max(to_draw1)], 'b-')
-        plt.title('Cz')
+	plt.plot(t_vec, pe0, 'orange')        
+	plt.title('Cz')
         plt.show()
         if suggest:
             return sug1, sug2
@@ -182,7 +193,8 @@ class p300_train(object):
                 tmp_sig[:l] = 0
                 tmp_sig[r:] = 0
                 #tmp_sig /= np.sqrt(np.dot(tmp_sig, tmp_sig))
-                xcor = np.correlate(tmp_sig, mean, 'full')[s_l - xc_time * self.fs : s_l + xc_time * self.fs]
+####TUTAJ                
+		xcor = np.correlate(tmp_sig, mean, 'full')[s_l - xc_time * self.fs : s_l + xc_time * self.fs]
                 trg.append(xcor.max())
             for i in no_target_sets:
                 tmp_sig = np.zeros(s_l2)
@@ -235,8 +247,8 @@ class p300_train(object):
             i[r:] = 0
             sl = len(i)
             xcor = np.correlate(i, mean, 'full')[sl - xc_time*self.fs:sl + xc_time*self.fs]
-            trg.append(xcor.max())
-            #trg.append(i.var())
+            #trg.append(xcor.max())
+            trg.append(i.var())
         for i in sigs:
             #i = i / np.sqrt(np.dot(i, i))
             i -= i.mean()
@@ -244,12 +256,12 @@ class p300_train(object):
             i[r:] = 0
             sl = len(i)
             xcor = np.correlate(i, mean, 'full')[sl - xc_time*self.fs:sl + xc_time*self.fs]
-            non_trg.append(xcor.max())
-            #non_trg.append(i.var())
+            #non_trg.append(xcor.max())
+            non_trg.append(i.var())
         trg = np.array(trg)
         non_trg = np.array(non_trg)
-        z_trg = (trg - non_trg.mean())/non_trg.std()
-        z_non_trg = (non_trg - non_trg.mean())/non_trg.std()
+        z_trg = trg#(trg - non_trg.mean())/non_trg.std()
+        z_non_trg = non_trg#(non_trg - non_trg.mean())/non_trg.std()
         if show:
             plt.figure(3)
             plt.hist(z_trg, normed=True, label='Target')
@@ -339,6 +351,9 @@ class p300_train(object):
             left -= 1
         while right < len(tmp_mean)-1 and tmp_mean[right + 1] - tmp_mean[right] > 0:
             right += 1
+##TU TEZ	
+	left = self.sug1*self.fs
+	right = self.sug2*self.fs
         return mean, left, right
     
     def __get_filter(self, c_max, c_min):

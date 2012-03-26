@@ -195,7 +195,8 @@ class p300_train(object):
                 #tmp_sig /= np.sqrt(np.dot(tmp_sig, tmp_sig))
 ####TUTAJ                
 		xcor = np.correlate(tmp_sig, mean, 'full')[s_l - xc_time * self.fs : s_l + xc_time * self.fs]
-                trg.append(xcor.max())
+                #trg.append(xcor.max())
+                trg.append(tmp_sig.var())
             for i in no_target_sets:
                 tmp_sig = np.zeros(s_l2)
                 for j in xrange(n):
@@ -205,7 +206,8 @@ class p300_train(object):
                 tmp_sig[:l] = 0
                 tmp_sig[r:] = 0
                 xcor = np.correlate(tmp_sig, mean, 'full')[s_l2 - xc_time * self.fs : s_l2 + xc_time * self.fs]
-                no_trg.append(xcor.max())
+                #no_trg.append(xcor.max())
+                no_trg.append(tmp_sig.var())
             trg = np.array(trg)
             no_trg = np.array(no_trg)
             mu, sigma = no_trg.mean(), no_trg.std()
@@ -225,7 +227,8 @@ class p300_train(object):
         for j, i in enumerate(tags):
             if (i + post) * self.fs < self.data.sample_count:
                 sig = self.signal[(i - pre) * self.fs : (i - pre)*self.fs + sigs_trg.shape[1]]
-                sigs_trg[j, :] = sig
+		#print sig.shape, (sigs_trg[j, :]).shape                
+		sigs_trg[j, :] = sig
         for j, i in enumerate(tags2):
             if (i + post) * self.fs < self.data.sample_count:
                 sig = self.signal[(i - pre) * self.fs : (i - pre)*self.fs + sigs.shape[1]]
@@ -357,7 +360,7 @@ class p300_train(object):
         return mean, left, right
     
     def __get_filter(self, c_max, c_min):
-        """This retzurns CSP filters
+        """This returns CSP filters
 
             Function returns array. Each column is a filter sorted in descending order i.e. first column represents filter that explains most energy, second - second most, etc.
 
@@ -467,7 +470,7 @@ class p300analysis(object):
         P_xt = len(np.where(Xt < feature)[0]) / float(len(Xt))
         P_xn = len(np.where(Xn > feature)[0]) / float(len(Xn))
         return P_xt * P_t / (P_xt * P_t + P_xn * P_n)
-    
+
     def woody(self, sig, xc_points=10, left=None, right=None, mean=None):
         if mean is None:
             mean = self.mean

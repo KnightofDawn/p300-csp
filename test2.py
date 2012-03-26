@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 from signalParser import signalParser as sp
 import scipy.signal as ss
 from filtfilt import filtfilt
+import sys
 filename = '../eeg-signals/p300-csp/ania1_p300.obci'
 channels = ['Fp1','Fp2','F7','F3','Fz','F4','F8','T3','C3','Cz','C4','T4','T5','P3','Pz','P4','T6','O1','O2','FCz']
 #channels = ['T3','C3','Cz','C4','T4','T5','P3','Pz','P4','T6', 'FCz','Fz']
@@ -20,7 +21,7 @@ dat = p300.p300_train(filename, channels, fs, idx=1, csp_time=[0.0, 0.5])
 ntt = dat.data.get_p300_tags(idx=-1, samples=False)
 #nt = dat.wyr(time=[0, 0.5], xc_time=0.05)
 nt = dat.tags
-#dat.show_mean_CSP([0, 0.5], nt)
+dat.show_mean_CSP([0, 0.5])#, nt)
 #mean, left, right = dat.get_mean(nt, m_time=[0, 0.5])
 #t_vec = np.linspace(-0, 0.5, len(mean))
 #plt.plot(t_vec, -mean, 'r-')
@@ -39,7 +40,24 @@ sr = 8
 #no_mu = np.zeros(sr)
 #no_sigma = np.zeros(sr)
 cl, mu, sigma, mean, left, right = dat.prep_classifier(sr, P_vectors=2, reg=1)
+
 cl[0].plot_features()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 print '#########ANALYSIS###############'
 from artifactClassifier import artifactsClasifier as ac
 analyze = p300.p300analysis2(cl, dat.P, 2, mean,mu, sigma, left, right)

@@ -1,8 +1,20 @@
+from filtfilt import *
+import numpy as np
+from sva2py import *
+from scipy.stats import mannwhitneyu
+
+
+
+
+
+
+
 def learn_read_signal_and_tags(filename):
 	s = sva2py(filename)
 	signal = s.signal()
-	return signal, target_tags, non_target_tags
+#brakuje tagow
 
+	return signal, target_tags, non_target_tags
 
 
 def learn_prep_signal(signal, target_tags, non_target_tags, czas_przed=-0.2, czas_po=0.5):
@@ -15,7 +27,6 @@ def learn_prep_signal(signal, target_tags, non_target_tags, czas_przed=-0.2, cza
 	for tag in range(len(target_tags)):
 		signals_non_target[tag,:,:] = (signal[:,:])[target_tags[tag]+(czas_przed*fs):non_target_tags[tag]+(czas_po*fs)]
 #jeszcze baseline
-
 	return filtr(signal_target), filtr(signal_non_target)
 
 
@@ -31,10 +42,15 @@ def filtruj(signal, b, a):
 	return signal
 
 
-
 def kiedy_sie_sygnaly_roznia(signal_target, signal_non_target):
-	return signal_target, signal_non_target
+	#w ktorych kanalach?
+	
+	
+	U, pe[i] = mannwhitneyu(sigs[:,i], sigs_trg[:,i])	
 
+
+
+	return signal_target, signal_non_target
 
 
 def train_csp(signal_target, signal_non_target):

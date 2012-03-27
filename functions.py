@@ -1,17 +1,35 @@
 def learn_read_signal_and_tags(filename):
-	wywalic niepotrzebne kanaly
+	s = sva2py(filename)
+	signal = s.signal()
 	return signal, target_tags, non_target_tags
 
 
-def learn_prep_signal(signal, target_tags, non_target_tags, czas_przed=-0.2, czas_po=0.5):
-	#time matrix, 		
-	#baseline = mean(czas przed do 0)
-	#od zera do czas po odejmuje baseline
-	return #macierz sygnalow target i non target [no_tag, chan, smpl]
 
-def filtr(signal_macierz, b, a):
-	return macierz po filtrze
-#rozpakowac, przefiltrowac, zapakowac, zreturnowac
+def learn_prep_signal(signal, target_tags, non_target_tags, czas_przed=-0.2, czas_po=0.5):
+	fs = s.samplingFrequency()
+	signal_target = np.zeros((len(target_tags), signal.shape[0], signal.shape[1]))
+	signal_non_target = np.zeros((len(non_target_tags), signal.shape[0], signal.shape[1]))
+
+	for tag in range(len(non_target_tags)):
+		signals_target[tag,:,:] = (signal[:,:])[non_target_tags[tag]+(czas_przed*fs):non_target_tags[tag]+(czas_po*fs)]
+	for tag in range(len(target_tags)):
+		signals_non_target[tag,:,:] = (signal[:,:])[target_tags[tag]+(czas_przed*fs):non_target_tags[tag]+(czas_po*fs)]
+#jeszcze baseline
+
+	return filtr(signal_target), filtr(signal_non_target)
+
+
+def filtr_projekt(freq, fs):
+	[b,a] = butter(3,freq/(fs/2.0), btype='low')
+	return b, a
+
+
+def filtruj(signal, b, a):
+	for tag in range(signal.shape[0]):
+		for chan in range(signal.shape[1]):
+			signal[tag,chan,:] = filtfilt(signal[tag,chan,:])
+	return signal
+
 
 
 def kiedy_sie_sygnaly_roznia(signal_target, signal_non_target):

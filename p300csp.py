@@ -16,7 +16,6 @@ def learn_read_signal_and_tags(filename, channel_list):
 	non_target_tags = s.get_p300_tags(idx = 1, rest = True)
 	return signal, fs, target_tags, non_target_tags
 
-
 def learn_prep_signal(signal, fs, target_tags, non_target_tags, czas_przed=-0.2, czas_po=0.5):
 	signal_target = np.zeros((len(target_tags), signal.shape[0], (czas_po-czas_przed)*fs))
 	signal_non_target = np.zeros((len(non_target_tags), signal.shape[0], (czas_po-czas_przed)*fs))
@@ -35,12 +34,10 @@ def learn_prep_signal(signal, fs, target_tags, non_target_tags, czas_przed=-0.2,
 	signal_non_target = signal_non_target - baseline_non_target[:,:,np.newaxis]
 	return signal_target, signal_non_target
 
-
 def filtr_projekt(rzad, freq, fs):
 	from scipy.signal import butter
 	[b,a] = butter(rzad,freq/(fs/2.0), btype='low')
 	return b, a
-
 
 def filtruj(b, a, signal):
 	from filtfilt import filtfilt
@@ -48,7 +45,6 @@ def filtruj(b, a, signal):
 		for chan in range(signal.shape[1]):
 			signal[tag,chan,:] = filtfilt(b, a, signal[tag,chan,:])
 	return signal
-
 
 def kiedy_sie_sygnaly_roznia(signal_target, signal_non_target, thre=1, thre_chan = 1):
 	from scipy.stats import mannwhitneyu
@@ -94,4 +90,13 @@ def train_csp(signal_target, signal_non_target):
         for i in xrange(len(vals)):
             P[:,i] = vects[:,vals_idx[i]] / np.sqrt(vals[vals_idx[i]])
         return P, vals[vals_idx]
+
+def apply_csp(signal_target, signal_non_target, P):
+	signal_target_csp = np.zeros(signal_target.shape)
+	signal_non_target_csp = np.zeros(signal_non_target.shape)
+	for tag in range(signal_target.shape[0]):
+		signal_target_csp[tag,:,:] = np.dot(P.transpose(),signal_target[tag,:,:])
+	for tag in range(signal_non_target.shape[0]):
+		signal_non_target_csp[tag,:,:] = np.dot(P.transpose(),signal_non_target[tag,:,:])
+	return signal_target_csp, signal_non_target_csp
 

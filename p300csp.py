@@ -31,8 +31,8 @@ def learn_prep_signal(signal, fs, target_tags, non_target_tags, czas_przed=-0.2,
 	baseline_target = np.mean(baseline_target, axis=2)
 	baseline_non_target = np.mean(baseline_non_target, axis=2)
 
-	#signal_target = signal_target - baseline_target
-	#signal_non_target = signal_non_target - baseline_non_target
+	signal_target = signal_target - baseline_target[:,:,np.newaxis]
+	signal_non_target = signal_non_target - baseline_non_target[:,:,np.newaxis]
 	return signal_target, signal_non_target
 
 
@@ -50,22 +50,25 @@ def filtruj(b, a, signal):
 	return signal
 
 
-def kiedy_sie_sygnaly_roznia(signal_target, signal_non_target, thre=1):
+def kiedy_sie_sygnaly_roznia(signal_target, signal_non_target, thre=1, thre_chan = 1):
 	from scipy.stats import mannwhitneyu
 	p = np.zeros(signal_target.shape[1:3])
+	p0 = np.zeros(signal_target.shape[1:3])
 	for chan in range(signal_target.shape[1]):
 		for sample in range(signal_target.shape[2]):
-			U, p[chan, sample] = mannwhitneyu(signal_target[:,chan,sample], signal_non_target[:,chan,sample])	
-	p = np.mean(p, axis = 0)
-	p0 = np.zeros(np.shape(p))
-        p0[np.where(p*100<thre)] = 1
-        p, = np.where(p0 == 1)   
-	signal_target_cut = np.zeros((signal_target.shape[0], signal_target.shape[1], p.shape[0]))
-	signal_non_target_cut = np.zeros((signal_non_target.shape[0], signal_non_target.shape[1], p.shape[0]))
+			U, p[chan, sample] = mannwhitneyu(signal_target[:,chan,sample], signal_non_target[:,chan,sample])
+		
+	p0[np.where(p[:,:]*100 < thre)] = 1
+	p = np.sum(p0, axis=0)
+	#print p
+	p_wieksze, = np.where(p>=thre_chan)
+	#print p_wieksze
+	signal_target_cut = np.zeros((signal_target.shape[0], signal_target.shape[1], p_wieksze.shape[0]))
+	signal_non_target_cut = np.zeros((signal_non_target.shape[0], signal_non_target.shape[1], p_wieksze.shape[0]))
 	count = 0
-	for sample in p:
-		signal_target_cut[:,:,count] = signal_target[:,:,p]
-		signal_non_target_cut[:,:,count] = signal_non_target[:,:,p]
+	for sample in p_wieksze:
+		signal_target_cut[:,:,count] = signal_target[:,:,sample]
+		signal_non_target_cut[:,:,count] = signal_non_target[:,:,sample]
 		count += 1
 	return signal_target_cut, signal_non_target_cut
 
@@ -76,12 +79,12 @@ def train_csp(signal_target, signal_non_target):
         trial_non_target = signal_non_target.shape[0]
 	cov_trg = np.zeros((chNo, chNo))
         cov_non_trg = np.zeros((chNo, chNo))
-        for i in range(trial_target):
-                A = np.matrix(signal_target[i,:,:])
+        for trial in range(trial_target):
+                A = np.matrix(signal_target[trial,:,:])
                 cov_trg += A * A.T/ np.trace(A * A.T)
         cov_trg /= trial_target
-        for i in range(trial_non_target):
-                A = np.matrix(signal_non_target[i,:,:])
+        for trial in range(trial_non_target):
+                A = np.matrix(signal_non_target[trial,:,:])
                 cov_non_trg += A * A.T/ np.trace(A * A.T)
         cov_non_trg /= trial_non_target
 	vals, vects = eig(cov_trg, cov_trg + cov_non_trg)

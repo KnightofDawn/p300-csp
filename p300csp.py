@@ -100,3 +100,16 @@ def apply_csp(signal_target, signal_non_target, P):
 		signal_non_target_csp[tag,:,:] = np.dot(P.transpose(),signal_non_target[tag,:,:])
 	return signal_target_csp, signal_non_target_csp
 
+def losuj(signal_target, signal_non_target, ile=100, po_ile=2):
+	signal_target_rand = np.zeros((ile, signal_target.shape[1], signal_target.shape[2]))
+	signal_non_target_rand = np.zeros((ile, signal_non_target.shape[1], signal_non_target.shape[2]))
+
+	for i in range(ile):
+		np.random.shuffle(signal_target)
+		np.random.shuffle(signal_non_target)
+		signal_target_rand[i] = np.mean(signal_target[0:po_ile+1], axis=0)
+		signal_non_target_rand[i] = np.mean(signal_non_target[0:po_ile+1], axis=0)
+	return signal_target_rand, signal_non_target_rand
+
+
+

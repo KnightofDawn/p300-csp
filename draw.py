@@ -4,27 +4,31 @@ import pylab as py
 
 
 
-def draw_cechy_3d(cecha_target, cecha_non_target):
-    from mpl_toolkits.mplot3d import Axes3D
-    fig = py.figure()
-    ax = fig.add_subplot(111, projection='3d')
+def cechy(cecha_target, cecha_non_target):
+    if cecha_target.shape[0] == 3 and cecha_non_target.shape[0] == 3:
 
-    ax.scatter(cecha_target[0], cecha_target[1], cecha_target[2],c='r')
-    ax.scatter(cecha_non_target[0], cecha_non_target[1], cecha_non_target[2],c='b')
+        from mpl_toolkits.mplot3d import Axes3D
+        fig = py.figure()
+        ax = fig.add_subplot(111, projection='3d')
 
-    ax.set_xlabel('X')
-    ax.set_ylabel('Y')
-    ax.set_zlabel('Z')
+        ax.scatter(cecha_target[0], cecha_target[1], cecha_target[2],c='r')
+        ax.scatter(cecha_non_target[0], cecha_non_target[1], cecha_non_target[2],c='b')
+
+        ax.set_xlabel('X')
+        ax.set_ylabel('Y')
+        ax.set_zlabel('Z')
+
+    elif cecha_target.shape[0] == 2 and cecha_non_target.shape[0] == 2:
+        py.plot(cecha_non_target[0], cecha_non_target[1], 'bo')
+        py.plot(cecha_target[0], cecha_target[1], 'ro')
 
     py.show()
 
-def draw_cechy_2d(cecha_target, cecha_non_target):
-    py.plot(cecha_non_target[0], cecha_non_target[1], 'bo')
-    py.plot(cecha_target[0], cecha_target[1], 'ro')
-    py.show()
 
 
-def draw_signal_matrix(signal_target, signal_non_target, rows=4, columns=5, type='plain'):
+
+
+def signal_matrix(signal_target, signal_non_target, rows=4, columns=5, type='plain'):
     for chan in range(signal_target.shape[1]):
         py.subplot(rows,columns,chan+1)
     

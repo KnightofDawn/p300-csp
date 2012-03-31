@@ -1,12 +1,28 @@
 import numpy as np
 
+def test_cechy(signal_target, signal_non_target, func, chans=[0,1]):
+    cechy_target = np.zeros((len(chans), signal_target.shape[0]))
+    cechy_non_target = np.zeros((len(chans), signal_non_target.shape[0]))
+    for tag_target in range(signal_target.shape[0]):
+        cechy_target[:,tag_target] = func(signal_target[tag_target,:,:], signal_target, signal_non_target, chans)
+    for tag_non_target in range(signal_non_target.shape[0]):
+        cechy_non_target[:,tag_non_target] = func(signal_non_target[tag_non_target,:,:], signal_target, signal_non_target, chans)
+    return cechy_target, cechy_non_target
 
+def var(signal, signal_target, signal_non_target, chans):
+    _var = np.zeros((len(chans)))
+    for chan in range(len(chans)):
+        _var[chan] = np.var(signal[chans[chan],:])
+    return _var
 
+def max_cor(signal, signal_target, signal_non_target, chans):
+    _cor = np.zeros((len(chans)))
+    for chan in range(len(chans)):
+        _cor[chan] = max(np.correlate(signal[chans[chan],:], np.mean(signal_target[:,chans[chan],:], axis=0), 'full'))
+    return _cor
 
-def cecha_var(signal_target, signal_non_target, ilosc=2):
-    var_target = np.zeros((ilosc, signal_target.shape[0]))
-    var_non_target = np.zeros((ilosc, signal_non_target.shape[0]))
-    for chan in range(ilosc):
-        var_target[chan] = np.var(signal_target[:,chan,:], axis=1)
-        var_non_target[chan] = np.var(signal_non_target[:,chan,:], axis=1)
-    return var_target, var_non_target
+def max_power(signal, signal_target, signal_non_target, chans):
+    _pow = np.zeros((len(chans)))
+    for chan in range(len(chans)):
+        _pow[chan] = max(signal[chans[chan],:]**2)
+    return _pow

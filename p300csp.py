@@ -68,7 +68,6 @@ def kiedy_sie_sygnaly_roznia(signal_target, signal_non_target, thre=1, thre_chan
 		count += 1
 	return signal_target_cut, signal_non_target_cut
 
-
 def train_csp(signal_target, signal_non_target):
 	from scipy.linalg import eig
         trial_target, chNo, smpl = signal_target.shape
@@ -111,5 +110,12 @@ def losuj(signal_target, signal_non_target, ile=100, po_ile=2):
 		signal_non_target_rand[i] = np.mean(signal_non_target[0:po_ile+1], axis=0)
 	return signal_target_rand, signal_non_target_rand
 
-
+def mahalanobis(x,y):
+	import scipy.spatial.distance as ssd
+	cov = np.cov(x,y)
+	print cov.shape
+	cov = np.linalg.inv(cov)
+	print cov.shape
+	ret = ssd.mahalanobis(x,y,cov)
+	return ret
 

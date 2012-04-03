@@ -65,7 +65,7 @@ signal_target, signal_non_target = apply_csp(signal_target, signal_non_target, P
 
 
 
-signal_target, signal_non_target = losuj(signal_target, signal_non_target, ile=3000, po_ile=4)
+signal_target, signal_non_target = losuj(signal_target, signal_non_target, ile=30, po_ile=2)
 
 
 
@@ -87,7 +87,11 @@ cechy_non_target[2] = cechy_non_target3[0]
 #cechy_target = cechy_target * cechy2_target *cechy3_target
 #cechy_non_target = cechy_non_target * cechy2_non_target *cechy3_non_target
 
-draw.cechy(cechy_target,cechy_non_target)
+print mahalanobis(cechy_target, cechy_non_target)
+
+
+
+#draw.cechy(cechy_target,cechy_non_target)
 
 
 

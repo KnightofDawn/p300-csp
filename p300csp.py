@@ -56,9 +56,11 @@ def kiedy_sie_sygnaly_roznia(signal_target, signal_non_target, thre=1, thre_chan
 		
 	p0[np.where(p[:,:]*100 < thre)] = 1
 	p = np.sum(p0, axis=0)
-	#print p
+	print p
+	import pylab as py
+	py.plot(p)
+	py.show()
 	p_wieksze, = np.where(p>=thre_chan)
-	#print p_wieksze
 	signal_target_cut = np.zeros((signal_target.shape[0], signal_target.shape[1], p_wieksze.shape[0]))
 	signal_non_target_cut = np.zeros((signal_non_target.shape[0], signal_non_target.shape[1], p_wieksze.shape[0]))
 	count = 0
@@ -111,11 +113,14 @@ def losuj(signal_target, signal_non_target, ile=100, po_ile=2):
 	return signal_target_rand, signal_non_target_rand
 
 def mahalanobis(x,y):
-	import scipy.spatial.distance as ssd
-	cov = np.cov(x,y)
-	print cov.shape
-	cov = np.linalg.inv(cov)
-	print cov.shape
-	ret = ssd.mahalanobis(x,y,cov)
-	return ret
-
+	from scipy.linalg import inv
+	x_mean = np.mean(x.T, axis=0)
+	y_mean = np.mean(y.T, axis=0)
+	x_cov = np.cov(x, bias = 1)
+	y_cov = np.cov(y, bias = 1)
+	nx = x.shape[1]
+	ny = y.shape[1]
+	cov = ((nx*x_cov)+(ny*y_cov))/(nx+ny-2)
+	cov = inv(cov)
+	dist = np.dot((x_mean - y_mean).T,np.dot(cov,(x_mean-y_mean)))
+	return np.sqrt(dist)

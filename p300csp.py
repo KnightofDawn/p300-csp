@@ -54,12 +54,13 @@ def kiedy_sie_sygnaly_roznia(signal_target, signal_non_target, thre=1, thre_chan
 		for sample in range(signal_target.shape[2]):
 			U, p[chan, sample] = mannwhitneyu(signal_target[:,chan,sample], signal_non_target[:,chan,sample])
 		
+	prys = np.sum(p, axis=0)
 	p0[np.where(p[:,:]*100 < thre)] = 1
 	p = np.sum(p0, axis=0)
-	print p
-	import pylab as py
-	py.plot(p)
-	py.show()
+	#print p
+	#import pylab as py
+	#py.plot(prys)
+	#py.show()
 	p_wieksze, = np.where(p>=thre_chan)
 	signal_target_cut = np.zeros((signal_target.shape[0], signal_target.shape[1], p_wieksze.shape[0]))
 	signal_non_target_cut = np.zeros((signal_non_target.shape[0], signal_non_target.shape[1], p_wieksze.shape[0]))
@@ -124,3 +125,13 @@ def mahalanobis(x,y):
 	cov = inv(cov)
 	dist = np.dot((x_mean - y_mean).T,np.dot(cov,(x_mean-y_mean)))
 	return np.sqrt(dist)
+
+def fft(signal):
+	fft = np.fft.rfft(signal)
+	return fft
+
+def fft_matrix(signal1, signal2):
+	signal1_fft = fft(signal1)
+	signal2_fft = fft(signal2)
+	return signal1_fft, signal2_fft
+

@@ -1,9 +1,6 @@
 import pylab as py
 
 
-
-
-
 def cechy(cecha_target, cecha_non_target):
     if cecha_target.shape[0] == 3 and cecha_non_target.shape[0] == 3:
 
@@ -24,11 +21,7 @@ def cechy(cecha_target, cecha_non_target):
 
     py.show()
 
-
-
-
-
-def signal_matrix(signal_target, signal_non_target, rows=4, columns=5, type='plain'):
+def signal_matrix(signal_target, signal_non_target, rows=4, columns=5, type='plain', mean=False):
     for chan in range(signal_target.shape[1]):
         py.subplot(rows,columns,chan+1)
     
@@ -38,7 +31,10 @@ def signal_matrix(signal_target, signal_non_target, rows=4, columns=5, type='pla
         elif type == 'var':
             target_plot = np.var(signal_target[:,chan,:], axis=1)
             non_target_plot = np.var(signal_non_target[:,chan,:], axis=1)
-    
+        if mean:
+            import numpy as np
+            target_plot = np.mean(target_plot, axis=1)
+            non_target_plot = np.mean(non_target_plot, axis=1)
         py.plot(non_target_plot, 'b')
         py.plot(target_plot,'r')
     py.show()

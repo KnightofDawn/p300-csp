@@ -69,16 +69,27 @@ signal_target, signal_non_target = apply_csp(signal_target, signal_non_target, P
 
 
 
-signal_target, signal_non_target = losuj(signal_target, signal_non_target, ile=1000, po_ile=2)
+signal_target, signal_non_target = losuj(signal_target, signal_non_target, ile=100, po_ile=2)
 
 
 
 print 'drawing nice pictures'
 
-#draw.signal_matrix(signal_target, signal_non_target, mean=True)
+#draw.signal_matrix(signal_target, signal_non_target, mean=False)
 signal_target_fft, signal_non_target_fft = fft_matrix(signal_target, signal_non_target)
-#draw.signal_matrix(signal_target_fft, signal_non_target_fft, mean=True)
+draw.signal_matrix(signal_target_fft, signal_non_target_fft, mean=False)
 
+
+
+#template = np.mean(signal_target_fft, axis=0)
+#k_target = cechy.kwroz(signal_target_fft, template)
+#k_non_target = cechy.kwroz(signal_non_target_fft, template)
+#to do rysunkow przenies
+#for i in range(k_target.shape[1]):
+#    py.subplot(5, 4, i+1)
+#    rys = [k_target[:,i], k_non_target[:,i]]
+#    py.boxplot(rys)
+#py.show()
 
 
 cechy_target3, cechy_non_target3 = cechy.test_cechy(signal_target_fft, signal_non_target_fft, cechy.max_cor, chans=range(20))
@@ -87,17 +98,18 @@ cechy_target2, cechy_non_target2 = cechy.test_cechy(signal_target, signal_non_ta
 cechy_target, cechy_non_target = cechy.test_cechy(signal_target, signal_non_target, cechy.max_cor, chans=range(20))
 
 
-
-cechy_target_final = np.zeros((80, cechy_target.shape[1]))
-cechy_non_target_final = np.zeros((80, cechy_non_target.shape[1]))
+cechy_target_final = np.zeros((40, cechy_target.shape[1]))
+cechy_non_target_final = np.zeros((40, cechy_non_target.shape[1]))
 cechy_target_final[0:20,:] = cechy_target
 cechy_non_target_final[0:20,:] = cechy_non_target
 cechy_target_final[20:40,:] = cechy_target2
 cechy_non_target_final[20:40,:] = cechy_non_target2
-cechy_target_final[40:60,:] = cechy_target3
-cechy_non_target_final[40:60,:] = cechy_non_target3
-cechy_target_final[60:80,:] = cechy_target4
-cechy_non_target_final[60:80,:] = cechy_non_target4
+
+
+#cechy_target_final[40:60,:] = cechy_target3
+#cechy_non_target_final[40:60,:] = cechy_non_target3
+#cechy_target_final[60:80,:] = cechy_target4
+#cechy_non_target_final[60:80,:] = cechy_non_target4
 
 #cechy_target[1] = cechy_target2[0]
 #cechy_non_target[1] = cechy_non_target2[0]
@@ -107,7 +119,7 @@ cechy_non_target_final[60:80,:] = cechy_non_target4
 
 print mahalanobis(cechy_non_target_final, cechy_target_final)
 
-draw.cechy(cechy_target,cechy_non_target)
+#draw.cechy(cechy_target,cechy_non_target)
 
 
 

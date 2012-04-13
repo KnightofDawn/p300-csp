@@ -26,3 +26,8 @@ def max_power(signal, signal_target, signal_non_target, chans):
     for chan in range(len(chans)):
         _pow[chan] = max(signal[chans[chan],:]**2)
     return _pow
+
+#to popraw zeby pasowalo do reszty
+def kwroz(signal_matrix, template):
+    ret = np.sum((signal_matrix - template[np.newaxis, :, :])**2, axis=2)
+    return ret

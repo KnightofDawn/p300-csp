@@ -128,7 +128,7 @@ def mahalanobis(x,y):
 
 def fft(signal):
 	fft = np.fft.rfft(signal)
-	return fft
+	return np.log(np.abs(fft))
 
 def fft_matrix(signal1, signal2):
 	signal1_fft = fft(signal1)

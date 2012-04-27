@@ -35,7 +35,7 @@ def signal_matrix(signal_target, signal_non_target, rows=4, columns=5, type='pla
             import numpy as np
             target_plot = np.mean(target_plot, axis=1)
             non_target_plot = np.mean(non_target_plot, axis=1)
-        py.plot(target_plot,'r')
         py.plot(non_target_plot, 'b')
+        py.plot(target_plot,'r')
     py.show()
 

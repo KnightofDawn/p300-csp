@@ -1,3 +1,10 @@
+#This program is free software: you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation, either version 3 of the License, or
+#(at your option) any later version.
+#Copyright © 2012 Piotr Milanowski <pmila@fuw.edu.pl>
+#License can be found in license
+
 from numpy import vstack, hstack, eye, ones, zeros,  \
 newaxis, r_, flipud, convolve, matrix, array, asarray
 from scipy.signal import lfilter

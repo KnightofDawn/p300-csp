@@ -1,3 +1,11 @@
+#This program is free software: you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation, either version 3 of the License, or
+#(at your option) any later version.
+#Copyright © 2012 Karol Augustin <karol@augustin.pl>
+#License can be found in license
+
+
 import numpy as np
 
 def test_cechy(signal_target, signal_non_target, func, chans=[0,1]):

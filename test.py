@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #This program is free software: you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
 #the Free Software Foundation, either version 3 of the License, or
@@ -54,7 +55,7 @@ signal_non_target = filtruj(b, a, signal_non_target)
 
 print 'Mannwhitneyu signal'
 
-signal_target, signal_non_target = kiedy_sie_sygnaly_roznia(signal_target, signal_non_target, thre=4, thre_chan = 2)
+#signal_target, signal_non_target = kiedy_sie_sygnaly_roznia(signal_target, signal_non_target, thre=4, thre_chan = 2)
 
 
 #py.plot(np.mean(signal_target[:,0,:], axis=0),'r.')
@@ -99,18 +100,18 @@ draw.signal_matrix(signal_target_fft, signal_non_target_fft, mean=False)
 #py.show()
 
 
-cechy_target3, cechy_non_target3 = cechy.test_cechy(signal_target_fft, signal_non_target_fft, cechy.max_cor, chans=range(20))
-cechy_target4, cechy_non_target4 = cechy.test_cechy(signal_target_fft, signal_non_target_fft, cechy.var, chans=range(20))
-cechy_target2, cechy_non_target2 = cechy.test_cechy(signal_target, signal_non_target, cechy.var, chans=range(20))
-cechy_target, cechy_non_target = cechy.test_cechy(signal_target, signal_non_target, cechy.max_cor, chans=range(20))
+cechy_target, cechy_non_target = cechy.test_cechy(signal_target_fft, signal_non_target_fft, cechy.max_cor_selective, chans=[0,1])
+#cechy_target4, cechy_non_target4 = cechy.test_cechy(signal_target_fft, signal_non_target_fft, cechy.var, chans=range(20))
+#cechy_target2, cechy_non_target2 = cechy.test_cechy(signal_target, signal_non_target, cechy.var, chans=range(20))
+#cechy_target, cechy_non_target = cechy.test_cechy(signal_target, signal_non_target, cechy.max_cor, chans=range(20))
 
 
-cechy_target_final = np.zeros((40, cechy_target.shape[1]))
-cechy_non_target_final = np.zeros((40, cechy_non_target.shape[1]))
-cechy_target_final[0:20,:] = cechy_target
-cechy_non_target_final[0:20,:] = cechy_non_target
-cechy_target_final[20:40,:] = cechy_target2
-cechy_non_target_final[20:40,:] = cechy_non_target2
+#cechy_target_final = np.zeros((40, cechy_target.shape[1]))
+#cechy_non_target_final = np.zeros((40, cechy_non_target.shape[1]))
+#cechy_target_final[0:20,:] = cechy_target
+#cechy_non_target_final[0:20,:] = cechy_non_target
+#cechy_target_final[20:40,:] = cechy_target2
+#cechy_non_target_final[20:40,:] = cechy_non_target2
 
 
 #cechy_target_final[40:60,:] = cechy_target3
@@ -124,9 +125,9 @@ cechy_non_target_final[20:40,:] = cechy_non_target2
 #cechy_non_target[2] = cechy_non_target3[0]
 
 
-print mahalanobis(cechy_non_target_final, cechy_target_final)
+print mahalanobis(cechy_non_target, cechy_target)
 
-#draw.cechy(cechy_target,cechy_non_target)
+draw.cechy(cechy_target,cechy_non_target)
 
 
 

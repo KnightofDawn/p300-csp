@@ -29,6 +29,13 @@ def max_cor(signal, signal_target, signal_non_target, chans):
         _cor[chan] = max(np.correlate(signal[chans[chan],:], np.mean(signal_target[:,chans[chan],:], axis=0), 'full'))
     return _cor
 
+def max_cor_selective(signal, signal_target, signal_non_target, chans):
+    _cor = np.zeros((len(chans)))
+    for chan in range(len(chans)):
+        corchan = np.correlate(signal[chans[chan],:], np.mean(signal_target[:,chans[chan],:], axis=0), 'full')
+        _cor[chan] = max(corchan[len(corchan) - 0.1*len(corchan):len(corchan) + 0.1*len(corchan)]
+    return _cor
+
 def max_power(signal, signal_target, signal_non_target, chans):
     _pow = np.zeros((len(chans)))
     for chan in range(len(chans)):

@@ -98,17 +98,17 @@ print 'drawing nice pictures'
 #    py.boxplot(rys)
 #py.show()
 
-cechy_target2, cechy_non_target2 = cechy.test_cechy(signal_target, signal_non_target, cechy.min_cor, chans=[0])
-cechy_target1, cechy_non_target1 = cechy.test_cechy(signal_target, signal_non_target, cechy.max_cor_selective, chans=[0,1])
+#cechy_target2, cechy_non_target2 = cechy.test_cechy(signal_target, signal_non_target, cechy.min_cor, chans=[0])
+cechy_target, cechy_non_target = cechy.test_cechy(signal_target, signal_non_target, cechy.max_cor_selective, chans=[0,1])
 
-cechy_target = np.zeros((3, cechy_target1.shape[1]))
-cechy_non_target = np.zeros((3, cechy_non_target1.shape[1]))
+#cechy_target = np.zeros((3, cechy_target1.shape[1]))
+#cechy_non_target = np.zeros((3, cechy_non_target1.shape[1]))
 
-cechy_target[0:2,:] = cechy_target1
-cechy_non_target[0:2,:] = cechy_non_target1
+#cechy_target[0:2,:] = cechy_target1
+#cechy_non_target[0:2,:] = cechy_non_target1
 
-cechy_target[2] = cechy_target2
-cechy_non_target[2] = cechy_non_target2
+#cechy_target[2] = cechy_target2
+#cechy_non_target[2] = cechy_non_target2
 
 
 

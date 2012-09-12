@@ -16,18 +16,20 @@ import sys
 #channel_list = ('O1', 'O2', 'Fp1', 'Fp2', 'P3')
 channel_list = ['P3','Pz','P4','Fp1','Fp2','F7','F3','Fz','F4','F8','T3','C3','Cz','C4','T4','T5','T6','O1','O2','FCz']
 #channel_list = ['O1','O2','Oz','Cz','P07','P08']
-print 'Importing signal'
+#print 'Importing signal'
 signal, fs, target_tags, non_target_tags = learn_read_signal_and_tags('../eeg-signals/p300-csp/ania1_p300.obci', channel_list)
+signal = signal - signal[17]/2 - signal[18]/2
 
 
-print 'Preparing signal'
+
+#print 'Preparing signal'
 signal_target, signal_non_target = learn_prep_signal(signal, fs, target_tags, non_target_tags, czas_przed=-0.2, czas_po = 0.5)
 
-'''
-print 'second signal importing and preparing'
-signal, fs, target_tags, non_target_tags = learn_read_signal_and_tags('../eeg-signals/p300-csp/ania2_p300.obci', channel_list)
-signal_target2, signal_non_target2 = learn_prep_signal(signal, fs, target_tags, non_target_tags, czas_przed=-0.2, czas_po = 0.5)
 
+#print 'second signal importing and preparing'
+#signal, fs, target_tags, non_target_tags = learn_read_signal_and_tags('../eeg-signals/p300-csp/ania2_p300.obci', channel_list)
+#signal_target_2, signal_non_target_2 = learn_prep_signal(signal, fs, target_tags, non_target_tags, czas_przed=-0.2, czas_po = 0.5)
+'''
 print 'joining signals'
 signal_target = np.concatenate((signal_target, signal_target2), axis=0)
 signal_non_target = np.concatenate((signal_non_target, signal_non_target2), axis=0)
@@ -45,17 +47,20 @@ sys.exit(0)
 '''
 
 
-print 'Filtering signal'
+#print 'Filtering signal'
 b, a = filtr_projekt(rzad = 2, freq = 25, fs = fs)
 signal_target = filtruj(b, a, signal_target)
 signal_non_target = filtruj(b, a, signal_non_target)
 
+#signal_target_2 = filtruj(b,a,signal_target_2)
+#signal_non_target_2 = filtruj(b,a,signal_non_target_2)
+
 #print signal_target.shape, signal_non_target.shape
 
 
-print 'Mannwhitneyu signal'
+#print 'Mannwhitneyu signal'
 
-signal_target, signal_non_target = kiedy_sie_sygnaly_roznia(signal_target, signal_non_target, thre=4, thre_chan = 2)
+#signal_target, signal_non_target = kiedy_sie_sygnaly_roznia(signal_target, signal_non_target, thre=4, thre_chan = 2)
 
 
 #py.plot(np.mean(signal_target[:,0,:], axis=0),'r.')
@@ -65,25 +70,37 @@ signal_target, signal_non_target = kiedy_sie_sygnaly_roznia(signal_target, signa
 
 
 
-print 'CSP tarin...'
+#print 'CSP tarin...'
 P, vals = train_csp(signal_target, signal_non_target)
 
 #print 'vals'
 #print vals
 #print 'Done'
 
-print 'applying csp'
+#print 'applying csp'
 signal_target, signal_non_target = apply_csp(signal_target, signal_non_target, P)
 
 
 
-signal_target, signal_non_target = losuj(signal_target, signal_non_target, ile=1000, po_ile=2)
+signal_target, signal_non_target = losuj(signal_target, signal_non_target, ile=70, po_ile=int(sys.argv[1]))
 
 
 
-print 'drawing nice pictures'
+#print 'drawing nice pictures'
+filename = 'macierz_csp_'+sys.argv[1]+'.svg'
+#channel_list=False
 
-#draw.signal_matrix(signal_target, signal_non_target, mean=False)
+draw.signal_matrix(signal_target, signal_non_target, mean=False, axis=(-250,250), filename=filename, titles=False)
+
+
+filename='sygnal_0_'+sys.argv[1]+'.svg'
+draw.signal(signal_target, signal_non_target, mean=False, axis=(-250,250), filename=filename, titles=False, chan=0)
+
+filename='sygnal_1_'+sys.argv[1]+'.svg'
+draw.signal(signal_target, signal_non_target, mean=False, axis=(-15,15), filename=filename, titles=False, chan=1)
+
+
+
 #signal_target_fft, signal_non_target_fft = fft_matrix(signal_target, signal_non_target)
 
 #draw.signal_matrix(signal_target, signal_non_target, mean=False)
@@ -133,6 +150,10 @@ cechy_target, cechy_non_target = cechy.test_cechy(signal_target, signal_non_targ
 #cechy_target[2] = cechy_target3[0]
 #cechy_non_target[2] = cechy_non_target3[0]
 
-print mahalanobis(cechy_non_target, cechy_target)
 
-draw.cechy(cechy_target,cechy_non_target)
+
+
+#####print mahalanobis(cechy_non_target, cechy_target)
+
+filename = 'cecha_'+sys.argv[1]+'.svg'
+draw.cechy(cechy_target/100000,cechy_non_target/100000,filename)

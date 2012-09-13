@@ -26,6 +26,7 @@ signal = signal - signal[17]/2 - signal[18]/2
 signal_target, signal_non_target = learn_prep_signal(signal, fs, target_tags, non_target_tags, czas_przed=-0.2, czas_po = 0.5)
 
 
+
 #print 'second signal importing and preparing'
 #signal, fs, target_tags, non_target_tags = learn_read_signal_and_tags('../eeg-signals/p300-csp/ania2_p300.obci', channel_list)
 #signal_target_2, signal_non_target_2 = learn_prep_signal(signal, fs, target_tags, non_target_tags, czas_przed=-0.2, czas_po = 0.5)
@@ -88,16 +89,16 @@ signal_target, signal_non_target = losuj(signal_target, signal_non_target, ile=7
 
 #print 'drawing nice pictures'
 filename = 'macierz_csp_'+sys.argv[1]+'.svg'
-#channel_list=False
+channel_list=False
 
-draw.signal_matrix(signal_target, signal_non_target, mean=False, axis=(-250,250), filename=filename, titles=False)
+draw.signal_matrix(signal_target, signal_non_target, mean=True, axis=(-250,250), filename=filename, titles=channel_list)
 
 
-filename='sygnal_0_'+sys.argv[1]+'.svg'
-draw.signal(signal_target, signal_non_target, mean=False, axis=(-250,250), filename=filename, titles=False, chan=0)
+filename='sygnal_csp_0_'+sys.argv[1]+'.svg'
+draw.signal(signal_target, signal_non_target, mean=False, axis=(-250,250), filename=filename, titles=channel_list, chan=0)
 
-filename='sygnal_1_'+sys.argv[1]+'.svg'
-draw.signal(signal_target, signal_non_target, mean=False, axis=(-15,15), filename=filename, titles=False, chan=1)
+#filename='sygnal_csp_1_'+sys.argv[1]+'.svg'
+#draw.signal(signal_target, signal_non_target, mean=False, axis=(-15,15), filename=filename, titles=False, chan=1)
 
 
 
@@ -116,7 +117,7 @@ draw.signal(signal_target, signal_non_target, mean=False, axis=(-15,15), filenam
 #py.show()
 
 #cechy_target2, cechy_non_target2 = cechy.test_cechy(signal_target, signal_non_target, cechy.min_cor, chans=[0])
-cechy_target, cechy_non_target = cechy.test_cechy(signal_target, signal_non_target, cechy.max_cor_selective, chans=[0,1])
+cechy_target, cechy_non_target = cechy.test_cechy(signal_target, signal_non_target, cechy.max_cor_selective, chans=[0])
 
 #cechy_target = np.zeros((3, cechy_target1.shape[1]))
 #cechy_non_target = np.zeros((3, cechy_non_target1.shape[1]))
@@ -153,7 +154,7 @@ cechy_target, cechy_non_target = cechy.test_cechy(signal_target, signal_non_targ
 
 
 
-#####print mahalanobis(cechy_non_target, cechy_target)
+print mahalanobis(cechy_non_target, cechy_target)
 
-filename = 'cecha_'+sys.argv[1]+'.svg'
+filename = 'cecha_csp_hist_'+sys.argv[1]+'.svg'
 draw.cechy(cechy_target/100000,cechy_non_target/100000,filename)

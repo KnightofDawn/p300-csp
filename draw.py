@@ -16,11 +16,11 @@ def cechy(cecha_target, cecha_non_target, filename):
         py.plot(cecha_target[0], cecha_target[1], 'ro')
 
     elif cecha_target.shape[0] == 1 and cecha_non_target.shape[0] == 1:
-        py.hist(cecha_target[0], normed=False, label='Non Targets')
-        py.hist(cecha_non_target[0], normed=False, alpha=.5, label='Targets')    
+        py.hist(cecha_target[0], normed=False, alpha=1, label='Targets', color='r')    
+        py.hist(cecha_non_target[0], normed=False, alpha=.5, label='Non-Targets', color='b')
         #py.xlabel('Max-corr')
         #py.ylabel('P')
-        py.legend()
+#        py.legend()
     py.savefig(filename, format='svg')
 
 
@@ -44,8 +44,8 @@ def signal_matrix(signal_target, signal_non_target, rows=4, columns=5, type='pla
         xs = np.linspace(-0.2,0.5,len(non_target_plot))
         if titles:
             py.title(titles[chan])
-        py.plot(xs,non_target_plot, 'b')
-        py.plot(xs,target_plot,'r', alpha=.5)
+        py.plot(xs,non_target_plot, 'b')#, label="Non-Targets")
+        py.plot(xs,target_plot,'r', alpha=.5)#, label="Targets")
 #        if not mean:
 #            py.plot(xs,np.mean(non_target_plot, axis=1),'c')
 #            py.plot(xs,np.mean(target_plot,axis=1),'y')
@@ -53,6 +53,7 @@ def signal_matrix(signal_target, signal_non_target, rows=4, columns=5, type='pla
         if axis is not False:
             py.ylim(axis)
         py.xlim((min(xs),max(xs)))
+        #py.legend()
         py.savefig(filename, format='svg')
     
 
@@ -72,8 +73,8 @@ def signal(signal_target, signal_non_target, chan, mean=False, type='plain', axi
     xs = np.linspace(-0.2,0.5,len(non_target_plot))
     if titles:
         py.title(titles[chan])
-    py.plot(xs,non_target_plot, 'b')
-    py.plot(xs,target_plot,'r',alpha=.5)
+    py.plot(xs,non_target_plot, 'b')#, label="Non-Targets")
+    py.plot(xs,target_plot,'r',alpha=.5)#, label="Targets")
 #        if not mean:
 #            py.plot(xs,np.mean(non_target_plot, axis=1),'c')
 #            py.plot(xs,np.mean(target_plot,axis=1),'y')
@@ -81,4 +82,5 @@ def signal(signal_target, signal_non_target, chan, mean=False, type='plain', axi
     if axis is not False:
         py.ylim(axis)
     py.xlim((min(xs),max(xs)))
+    #py.legend()
     py.savefig(filename, format='svg')

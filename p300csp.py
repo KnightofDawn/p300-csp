@@ -130,7 +130,10 @@ def mahalanobis(x,y):
 	nx = x.shape[1]
 	ny = y.shape[1]
 	cov = ((nx*x_cov)+(ny*y_cov))/(nx+ny-2)
-	cov = inv(cov)
+	try:
+		cov = inv(cov)
+	except:
+		cov = 1/cov
 	dist = np.dot((x_mean - y_mean).T,np.dot(cov,(x_mean-y_mean)))
 	return np.sqrt(dist)
 

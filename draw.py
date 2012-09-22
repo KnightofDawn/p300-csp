@@ -100,7 +100,7 @@ def signal(signal_target, signal_non_target, chan, mean=False, type='plain', axi
     elif show:
         py.show()
 
-def rysujPodzial(model, X, show=False):
+def rysujPodzial(model, X, show=False, filename=False):
     N = 100 # ilość punktów siatki w jednym wymiarze
     os_x = np.linspace(X.min(),X.max(),N)
     klasa = np.zeros((N,N))
@@ -112,5 +112,8 @@ def rysujPodzial(model, X, show=False):
             #svmPredict(model, XX) # dla każdego punktu siatki obliczamy jego klasę
     x1_grid,x2_grid = np.meshgrid(os_x,os_x)
     py.contourf(x1_grid, x2_grid, klasa.T,2)
-    if show:
+    if filename:
+        py.savefig(filename, format='svg')
+    elif show:
         py.show()
+

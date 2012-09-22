@@ -98,4 +98,4 @@ for i,C in enumerate(zakresC):
 
 
 draw.cechy(cechy_target_t/1000000, cechy_non_target_t/1000000)
-draw.rysujPodzial(bestModel, Xt, filename='class-'+sys.argv[1])
+draw.rysujPodzial(bestModel, Xt, filename='class-'+str(ile)+'_'+str(po_ile)+'.svg')

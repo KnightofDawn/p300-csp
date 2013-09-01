@@ -28,17 +28,31 @@ def cechy(cecha_target, cecha_non_target, filename=False, show=False):
         #py.xlabel('Max-corr')
         #py.ylabel('P')
 #        py.legend()
+        py.grid(True)
     if filename:
-        py.savefig(filename, format='svg')
+        py.savefig(filename, format='png')
     elif show:
         py.show()
 
-
-
-def signal_matrix(signal_target, signal_non_target, rows=4, columns=5, type='plain', mean=False, axis=False, filename=False, show=False, titles=False):
+def mahalanobis(toz, hjo, csp, filename):
     py.figure(figsize=(21, 14))
-    for chan in range(signal_target.shape[1]):
-        py.subplot(rows,columns,chan+1)
+    py.xlim((0,len(toz)+1))
+    xs = range(1,len(toz)+1)
+    py.plot(xs,toz, 'bo', label='Tozsamosciowy')
+    py.plot(xs,hjo, 'ro', label='Hjorth')
+    py.plot(xs,csp, 'go', label='CSP')
+    py.grid(True)
+    py.legend()
+    py.savefig(filename, format='png')
+
+
+def signal_matrix(signal_target, signal_non_target, rows=4, columns=5, type='plain', mean=False, axis=False, filename=False, show=False, titles=False, chans=False):
+    if chans == False: chans = range(signal_target.shape[1])
+    py.figure(figsize=(21, 14))
+    sbpl = 1
+    for chan in chans:
+        py.subplot(rows,columns,sbpl)
+        sbpl += 1
     
         if type == 'plain':
             non_target_plot = (signal_non_target[:,chan,:]).transpose()
@@ -63,9 +77,9 @@ def signal_matrix(signal_target, signal_non_target, rows=4, columns=5, type='pla
             py.ylim(axis)
         py.xlim((min(xs),max(xs)))
         #py.legend()
-        
+        py.grid(True)
         if filename:
-            py.savefig(filename, format='svg')
+            py.savefig(filename, format='png')
         elif show:
             py.show()
 
@@ -95,8 +109,9 @@ def signal(signal_target, signal_non_target, chan, mean=False, type='plain', axi
         py.ylim(axis)
     py.xlim((min(xs),max(xs)))
     #py.legend()
+    py.grid(True)
     if filename:
-        py.savefig(filename, format='svg')
+        py.savefig(filename, format='png')
     elif show:
         py.show()
 
@@ -113,7 +128,7 @@ def rysujPodzial(model, X, show=False, filename=False):
     x1_grid,x2_grid = np.meshgrid(os_x,os_x)
     py.contourf(x1_grid, x2_grid, klasa.T,2)
     if filename:
-        py.savefig(filename, format='svg')
+        py.savefig(filename, format='png')
     elif show:
         py.show()
 

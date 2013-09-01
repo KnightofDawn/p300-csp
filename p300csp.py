@@ -49,7 +49,7 @@ def filtr_projekt(rzad, freq, fs):
 
 def filtruj(b, a, signal):
 	from filtfilt import filtfilt
-	for tag in range(signal.shape[0]):
+ 	for tag in range(signal.shape[0]):
 		for chan in range(signal.shape[1]):
 			signal[tag,chan,:] = filtfilt(b, a, signal[tag,chan,:])
 	return signal
@@ -120,6 +120,31 @@ def losuj(signal_target, signal_non_target, ile=100, po_ile=2):
 		signal_target_rand[i] = np.mean(signal_target[0:po_ile+1], axis=0)
 		signal_non_target_rand[i] = np.mean(signal_non_target[0:po_ile+1], axis=0)
 	return signal_target_rand, signal_non_target_rand
+
+def hjorth(signal):
+	signal_hj = np.zeros(signal.shape)
+ 	for tag in range(signal.shape[0]):
+		signal_hj[tag][0] = signal[tag][0] - 0.25*(signal[tag][1]+signal[tag][2]+signal[tag][3]+signal[tag][4])
+		signal_hj[tag][1] = signal[tag][1] - 0.25*(signal[tag][0]+signal[tag][4]+signal[tag][5]+signal[tag][6])
+		signal_hj[tag][2] = signal[tag][2] - 0.25*(signal[tag][0]+signal[tag][3]+signal[tag][7]+signal[tag][8])
+		signal_hj[tag][3] = signal[tag][3] - 0.25*(signal[tag][2]+signal[tag][4]+signal[tag][0]+signal[tag][8])
+		signal_hj[tag][4] = signal[tag][4] - 0.20*(signal[tag][3]+signal[tag][5]+signal[tag][0]+signal[tag][1]+signal[tag][19])
+		signal_hj[tag][5] = signal[tag][5] - 0.25*(signal[tag][4]+signal[tag][6]+signal[tag][1]+signal[tag][10])
+		signal_hj[tag][6] = signal[tag][6] - 0.25*(signal[tag][1]+signal[tag][5]+signal[tag][10]+signal[tag][11])
+		signal_hj[tag][7] = signal[tag][7] - 0.20*(signal[tag][2]+signal[tag][3]+signal[tag][8]+signal[tag][12]+signal[tag][13])
+		signal_hj[tag][8] = signal[tag][8] - 0.25*(signal[tag][7]+signal[tag][9]+signal[tag][3]+signal[tag][13])
+		signal_hj[tag][9] = signal[tag][9] - 0.25*(signal[tag][8]+signal[tag][10]+signal[tag][4]+signal[tag][14])
+		signal_hj[tag][10] = signal[tag][10] - 0.25*(signal[tag][9]+signal[tag][11]+signal[tag][15]+signal[tag][5])
+		signal_hj[tag][11] = signal[tag][11] - 0.20*(signal[tag][10]+signal[tag][5]+signal[tag][6]+signal[tag][15]+signal[tag][16])
+		signal_hj[tag][12] = signal[tag][12] - 0.25*(signal[tag][13]+signal[tag][7]+signal[tag][8]+signal[tag][17])
+		signal_hj[tag][13] = signal[tag][13] - 0.25*(signal[tag][12]+signal[tag][14]+signal[tag][8]+signal[tag][17])
+		signal_hj[tag][14] = signal[tag][14] - 0.20*(signal[tag][13]+signal[tag][15]+signal[tag][17]+signal[tag][18]+signal[tag][9])
+		signal_hj[tag][15] = signal[tag][15] - 0.25*(signal[tag][10]+signal[tag][14]+signal[tag][16]+signal[tag][18])
+		signal_hj[tag][16] = signal[tag][16] - 0.25*(signal[tag][15]+signal[tag][11]+signal[tag][18]+signal[tag][10])
+		signal_hj[tag][17] = signal[tag][17] - 0.25*(signal[tag][18]+signal[tag][12]+signal[tag][13]+signal[tag][14])
+		signal_hj[tag][18] = signal[tag][18] - 0.25*(signal[tag][17]+signal[tag][14]+signal[tag][15]+signal[tag][16])
+		signal_hj[tag][19] = signal[tag][19] - (1/7.)*(signal[tag][3]+signal[tag][4]+signal[tag][5]+signal[tag][8]+signal[tag][8]+signal[tag][9]+signal[tag][10])
+	return signal_hj
 
 def mahalanobis(x,y):
 	from scipy.linalg import inv

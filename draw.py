@@ -12,8 +12,8 @@ import numpy as np
 import sys
 sys.path.append('libsvm-3.12/python')
 
-from svm import *
-from svmutil import *
+#from svm import *
+#from svmutil import *
 
 
 def cechy(cecha_target, cecha_non_target, filename=False, show=False):

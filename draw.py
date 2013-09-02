@@ -28,7 +28,7 @@ def cechy(cecha_target, cecha_non_target, filename=False, show=False):
         #py.xlabel('Max-corr')
         #py.ylabel('P')
 #        py.legend()
-        py.grid(True)
+    py.grid(True)
     if filename:
         py.savefig(filename, format='png')
     elif show:

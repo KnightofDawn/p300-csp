@@ -61,6 +61,6 @@ for ch1 in analize_channels:
 
 filename='sygnal_'+sys.argv[1]+'_'+sys.argv[2]+'.png'
 draw.signal_matrix(signal_target, signal_non_target, mean=False, axis=(-250,250), filename=filename, titles=channel_list, chans=[ch1g,ch2g], rows=2, columns=1)
-filename = 'cecha_'+sys.argv[1]+'_'+sys.argv[2]+'_'+'.png'
+filename = 'cecha_'+sys.argv[1]+'_'+sys.argv[2]+'.png'
 draw.cechy(cechy_target_best/100000,cechy_non_target_best/100000,filename)
 print mah0

@@ -25,7 +25,7 @@ signal_target = filtruj(b, a, signal_target)
 signal_non_target = filtruj(b, a, signal_non_target)
 
 
-analize_channels = [0,1]
+analize_channels = [4,9]
 ####CSP####
 if sys.argv[1] == 'csp':
     P, vals = train_csp(signal_target, signal_non_target)
@@ -37,23 +37,23 @@ if sys.argv[1] == 'csp':
 ####HJORTH####
 if sys.argv[1] == 'hjorth':
     signal_target = hjorth(signal_target)
-    signal_non_taget = hjorth(signal_non_target)
-    analize_channels = [0,1]
+    signal_non_target = hjorth(signal_non_target)
+    analize_channels = [11,16]
 ####HJORTH####
 
 
 
-if sys.argv[2] == 1:
-    filename = 'macierz_'+sys.argv[1]+'_.png'
+if int(sys.argv[2]) == 1:
+    filename = 'macierz_'+sys.argv[1]+'.png'
     draw.signal_matrix(signal_target, signal_non_target, mean=True, axis=(-250,250), filename=filename, titles=channel_list)
 
-filename='sygnal_'+sys.argv[1]+'_.png'
+filename='sygnal_'+sys.argv[1]+'.png'
 draw.signal_matrix(signal_target, signal_non_target, mean=False, axis=(-250,250), filename=filename, titles=channel_list, chans=analize_channels, rows=2, columns=1)
 
 
 
 signal_target, signal_non_target = losuj(signal_target, signal_non_target, ile=100, po_ile=int(sys.argv[2]))
-cechy_target, cechy_non_target = cechy.test_cechy(signal_target, signal_non_target, cechy.max_cor_selective, chans=analize_channels, tre=10, ile=100, poile=2)
+cechy_target, cechy_non_target = cechy.test_cechy(signal_target, signal_non_target, cechy.max_cor_selective, chans=analize_channels, tre=10, ile=100, poile=int(sys.argv[2]))
 mah = mahalanobis(cechy_non_target, cechy_target)
 
 filename = 'cecha_'+sys.argv[1]+'_'+sys.argv[2]+'.png'

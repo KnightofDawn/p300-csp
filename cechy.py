@@ -9,13 +9,16 @@
 
 import numpy as np
 
-def test_cechy(signal_target, signal_non_target, func, chans=[0,1]):
-    cechy_target = np.zeros((len(chans), signal_target.shape[0]))
-    cechy_non_target = np.zeros((len(chans), signal_non_target.shape[0]))
-    for tag_target in range(signal_target.shape[0]):
-        cechy_target[:,tag_target] = func(signal_target[tag_target,:,:], signal_target, signal_non_target, chans)
-    for tag_non_target in range(signal_non_target.shape[0]):
-        cechy_non_target[:,tag_non_target] = func(signal_non_target[tag_non_target,:,:], signal_target, signal_non_target, chans)
+def test_cechy(signal_target, signal_non_target, func, chans=[0,1], tre=10, ile=100, poile=2):
+    cechy_target = np.zeros((len(chans), ile))
+    cechy_non_target = np.zeros((len(chans), ile))
+    for tag_target in range(ile):
+        np.random.shuffle(signal_target)
+        np.random.shuffle(signal_non_target)
+        signal_t = np.mean(signal_target[0:poile], axis=0)
+        signal_nt = np.mean(signal_non_target[0:poile], axis=0)
+        cechy_target[:,tag_target] = func(signal_t, signal_target[tre:], signal_non_target, chans)
+        cechy_non_target[:,tag_target] = func(signal_nt, signal_target[tre:], signal_non_target, chans)
     return cechy_target, cechy_non_target
 
 def var(signal, signal_target, signal_non_target, chans):

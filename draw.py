@@ -17,7 +17,7 @@ sys.path.append('libsvm-3.12/python')
 
 
 def cechy(cecha_target, cecha_non_target, filename=False, show=False):
-    py.figure(figsize=(11, 8))
+    py.figure(figsize=(11, 7.95))
     if cecha_target.shape[0] == 2 and cecha_non_target.shape[0] == 2:
         py.plot(cecha_non_target[0], cecha_non_target[1], 'bo')
         py.plot(cecha_target[0], cecha_target[1], 'ro')
@@ -35,20 +35,27 @@ def cechy(cecha_target, cecha_non_target, filename=False, show=False):
         py.show()
 
 def mahalanobis(toz, hjo, csp, filename):
-    py.figure(figsize=(21, 14))
+    py.figure(figsize=(11, 7.95))
     py.xlim((0,len(toz)+1))
     xs = range(1,len(toz)+1)
     py.plot(xs,toz, 'bo', label='Tozsamosciowy')
     py.plot(xs,hjo, 'ro', label='Hjorth')
     py.plot(xs,csp, 'go', label='CSP')
+    py.plot(xs,toz, 'b')
+    py.plot(xs,hjo, 'r')
+    py.plot(xs,csp, 'g')
     py.grid(True)
-    py.legend()
+    py.legend(loc=2)
     py.savefig(filename, format='png')
 
 
-def signal_matrix(signal_target, signal_non_target, rows=4, columns=5, type='plain', mean=False, axis=False, filename=False, show=False, titles=False, chans=False):
+def signal_matrix(signal_target, signal_non_target, rows=4, columns=5, type='plain', mean=False, axis=False, filename=False, show=False, titles=False, chans=False, small=False):
     if chans == False: chans = range(signal_target.shape[1])
-    py.figure(figsize=(21, 14))
+    #py.figure(figsize=(17, 12.5))
+    if small:
+        py.figure(figsize=(11, 7.95))
+    else:
+        py.figure(figsize=(18, 13))
     sbpl = 1
     for chan in chans:
         py.subplot(rows,columns,sbpl)
@@ -78,6 +85,7 @@ def signal_matrix(signal_target, signal_non_target, rows=4, columns=5, type='pla
         py.xlim((min(xs),max(xs)))
         #py.legend()
         py.grid(True)
+#        py.tight_layout()
         if filename:
             py.savefig(filename, format='png')
         elif show:

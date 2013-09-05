@@ -1,6 +1,6 @@
 #!/bin/bash
-python run_tozs.py toz 1
-python run_tozs.py toz 2 > mah_toz
+python run_tozs.py toz 1 > mah_toz
+python run_tozs.py toz 2 >> mah_toz
 python run_tozs.py toz 3 >> mah_toz
 python run_tozs.py toz 4 >> mah_toz
 python run_tozs.py toz 5 >> mah_toz
@@ -10,8 +10,8 @@ python run_tozs.py toz 8 >> mah_toz
 python run_tozs.py toz 9 >> mah_toz
 python run_tozs.py toz 10 >> mah_toz
 
-python run_tozs.py csp 1
-python run_tozs.py csp 2 > mah_csp
+python run_tozs.py csp 1 > mah_csp
+python run_tozs.py csp 2 >> mah_csp
 python run_tozs.py csp 3 >> mah_csp
 python run_tozs.py csp 4 >> mah_csp
 python run_tozs.py csp 5 >> mah_csp
@@ -21,8 +21,8 @@ python run_tozs.py csp 8 >> mah_csp
 python run_tozs.py csp 9 >> mah_csp
 python run_tozs.py csp 10 >> mah_csp
 
-python run_tozs.py hjorth 1
-python run_tozs.py hjorth 2 > mah_hjorth
+python run_tozs.py hjorth 1 > mah_hjorth
+python run_tozs.py hjorth 2 >> mah_hjorth
 python run_tozs.py hjorth 3 >> mah_hjorth
 python run_tozs.py hjorth 4 >> mah_hjorth
 python run_tozs.py hjorth 5 >> mah_hjorth

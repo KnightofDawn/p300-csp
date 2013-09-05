@@ -38,7 +38,7 @@ if sys.argv[1] == 'csp':
 if sys.argv[1] == 'hjorth':
     signal_target = hjorth(signal_target)
     signal_non_target = hjorth(signal_non_target)
-    analize_channels = [11,16]
+    analize_channels = [11,14]
 ####HJORTH####
 
 
@@ -48,7 +48,7 @@ if int(sys.argv[2]) == 1:
     draw.signal_matrix(signal_target, signal_non_target, mean=True, axis=(-250,250), filename=filename, titles=channel_list)
 
 filename='sygnal_'+sys.argv[1]+'.png'
-draw.signal_matrix(signal_target, signal_non_target, mean=False, axis=(-250,250), filename=filename, titles=channel_list, chans=analize_channels, rows=2, columns=1)
+draw.signal_matrix(signal_target, signal_non_target, mean=False, axis=(-400,400), filename=filename, titles=channel_list, chans=analize_channels, rows=2, columns=1, small=True)
 
 
 

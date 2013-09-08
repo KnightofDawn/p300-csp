@@ -38,7 +38,7 @@ if sys.argv[1] == 'csp':
 if sys.argv[1] == 'hjorth':
     signal_target = hjorth(signal_target)
     signal_non_target = hjorth(signal_non_target)
-    analize_channels = [11,14]
+    analize_channels = [12,14]
 ####HJORTH####
 
 

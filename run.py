@@ -32,7 +32,7 @@ if sys.argv[1] == 'csp':
     signal_target, signal_non_target = apply_csp(signal_target, signal_non_target, P)
     channel_list = range(0,len(channel_list))
     analize_channels = [0,1]
-    sclae_matrix = 50
+    scale_matrix = 50
 ####CSP####
 
 ####HJORTH####

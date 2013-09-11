@@ -24,7 +24,7 @@ b, a = filtr_projekt(rzad = 2, freq = 25, fs = fs)
 signal_target = filtruj(b, a, signal_target)
 signal_non_target = filtruj(b, a, signal_non_target)
 
-
+scale_matrix = 200
 analize_channels = [4,9]
 ####CSP####
 if sys.argv[1] == 'csp':
@@ -32,6 +32,7 @@ if sys.argv[1] == 'csp':
     signal_target, signal_non_target = apply_csp(signal_target, signal_non_target, P)
     channel_list = range(0,len(channel_list))
     analize_channels = [0,1]
+    sclae_matrix = 50
 ####CSP####
 
 ####HJORTH####
@@ -39,13 +40,14 @@ if sys.argv[1] == 'hjorth':
     signal_target = hjorth(signal_target)
     signal_non_target = hjorth(signal_non_target)
     analize_channels = [12,14]
+    scale_matrix = 100
 ####HJORTH####
 
 
 
 if int(sys.argv[2]) == 1:
     filename = 'macierz_'+sys.argv[1]+'.png'
-    draw.signal_matrix(signal_target, signal_non_target, mean=True, axis=(-250,250), filename=filename, titles=channel_list)
+    draw.signal_matrix(signal_target, signal_non_target, mean=True, axis=(scale_matrix*(-1),scale_matrix), filename=filename, titles=channel_list)
 
 filename='sygnal_'+sys.argv[1]+'.png'
 draw.signal_matrix(signal_target, signal_non_target, mean=False, axis=(-400,400), filename=filename, titles=channel_list, chans=analize_channels, rows=2, columns=1, small=True)

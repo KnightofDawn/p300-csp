@@ -16,7 +16,7 @@ import sys
 
 channel_list = ['Fp1','Fp2','F7','F3','Fz','F4','F8','T3','C3','Cz','C4','T4','T5','P3','Pz','P4','T6','O1','O2','FCz']
 signal, fs, target_tags, non_target_tags = learn_read_signal_and_tags('../eeg-signals/p300-csp/ania1_p300.obci', channel_list)
-signal = signal - signal[17]/2 - signal[18]/2
+signal = (signal - signal[17]/2 - signal[18]/2)*0.0725
 
 signal_target, signal_non_target = learn_prep_signal(signal, fs, target_tags, non_target_tags, czas_przed=-0.2, czas_po = 0.5)
 
@@ -24,7 +24,7 @@ b, a = filtr_projekt(rzad = 2, freq = 25, fs = fs)
 signal_target = filtruj(b, a, signal_target)
 signal_non_target = filtruj(b, a, signal_non_target)
 
-scale_matrix = 200
+scale_matrix = 15
 analize_channels = [4,9]
 ####CSP####
 if sys.argv[1] == 'csp':
@@ -32,7 +32,7 @@ if sys.argv[1] == 'csp':
     signal_target, signal_non_target = apply_csp(signal_target, signal_non_target, P)
     channel_list = range(0,len(channel_list))
     analize_channels = [0,1]
-    scale_matrix = 50
+    scale_matrix = 5
 ####CSP####
 
 ####HJORTH####
@@ -40,7 +40,6 @@ if sys.argv[1] == 'hjorth':
     signal_target = hjorth(signal_target)
     signal_non_target = hjorth(signal_non_target)
     analize_channels = [12,14]
-    scale_matrix = 100
 ####HJORTH####
 
 
@@ -50,7 +49,7 @@ if int(sys.argv[2]) == 1:
     draw.signal_matrix(signal_target, signal_non_target, mean=True, axis=(scale_matrix*(-1),scale_matrix), filename=filename, titles=channel_list)
 
 filename='sygnal_'+sys.argv[1]+'.png'
-draw.signal_matrix(signal_target, signal_non_target, mean=False, axis=(-400,400), filename=filename, titles=channel_list, chans=analize_channels, rows=2, columns=1, small=True)
+draw.signal_matrix(signal_target, signal_non_target, mean=False, axis=(scale_matrix*(-1)*2,scale_matrix*2), filename=filename, titles=channel_list, chans=analize_channels, rows=2, columns=1, small=True)
 
 
 

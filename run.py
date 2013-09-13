@@ -15,7 +15,7 @@ import sys
 
 
 channel_list = ['Fp1','Fp2','F7','F3','Fz','F4','F8','T3','C3','Cz','C4','T4','T5','P3','Pz','P4','T6','O1','O2','FCz']
-signal, fs, target_tags, non_target_tags = learn_read_signal_and_tags('../eeg-signals/p300-csp/ania1_p300.obci', channel_list)
+signal, fs, target_tags, non_target_tags = learn_read_signal_and_tags('signal/ania1_p300.obci', channel_list)
 signal = (signal - signal[17]/2 - signal[18]/2)*0.0725
 
 signal_target, signal_non_target = learn_prep_signal(signal, fs, target_tags, non_target_tags, czas_przed=-0.2, czas_po = 0.5)
